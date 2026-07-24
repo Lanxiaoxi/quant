@@ -67,6 +67,10 @@ if FRONTEND_DIST.exists():
     app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
+        # 只处理前端路由，不拦截 API 请求
+        if full_path.startswith("api/"):
+            from fastapi.responses import JSONResponse
+            return JSONResponse({"detail": "Not Found"}, 404)
         path = FRONTEND_DIST / full_path
         if path.is_file():
             return FileResponse(path)
