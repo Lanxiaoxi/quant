@@ -1,0 +1,19 @@
+# 数据与密钥
+data/
+backend/.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node（M4 前端启用）
+node_modules/
+frontend/dist/
+
+# 编辑器
+.idea/
+.vscode/
+.workbuddy/
+*.log
+backend/runs/

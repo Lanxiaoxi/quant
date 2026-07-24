@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trading-quant</title>
+  </head>
+  <body>
+    <div id="root"><div style="padding:20px;font-family:monospace;color:#666;">Loading...</div></div>
+    <script>
+      window.onerror = function(msg, src, line, col, err) {
+        document.getElementById('root').innerHTML = '<div style="padding:20px;font-family:monospace;color:red;background:#fff3f3;border:2px solid red;margin:20px;border-radius:8px;"><h3>JS Error</h3><pre style="white-space:pre-wrap;word-break:break-all">' + (err ? err.stack : msg + ' at ' + src + ':' + line) + '</pre></div>';
+      };
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
