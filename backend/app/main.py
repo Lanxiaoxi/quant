@@ -62,19 +62,23 @@ app.add_middleware(
 # ---- 生产模式：托管前端静态文件 ----
 FRONTEND_DIST = BACKEND_DIR.parent / "frontend" / "dist"
 if FRONTEND_DIST.exists():
-    from fastapi.staticfiles import StaticFiles
+    from starlette.applications import Starlette
+    from starlette.routing import Route, Mount
+    from starlette.staticfiles import StaticFiles
     from starlette.responses import FileResponse
-    app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
-    @app.get("/{full_path:path}")
-    async def serve_frontend(full_path: str):
-        # 只处理前端路由，不拦截 API 请求
-        if full_path.startswith("api/"):
-            from fastapi.responses import JSONResponse
-            return JSONResponse({"detail": "Not Found"}, 404)
-        path = FRONTEND_DIST / full_path
+    from starlette.requests import Request
+
+    async def frontend_fallback(request: Request) -> FileResponse:
+        path = FRONTEND_DIST / request.path_params["path"].lstrip("/")
         if path.is_file():
             return FileResponse(path)
         return FileResponse(FRONTEND_DIST / "index.html")
+
+    frontend_app = Starlette(routes=[
+        Mount("/assets", app=StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets"),
+        Route("/{path:path}", endpoint=frontend_fallback),
+    ])
+    app.mount("/", app=frontend_app)
     log.info("前端托管已启用: %s", FRONTEND_DIST)
 
 
