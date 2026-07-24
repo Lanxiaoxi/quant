@@ -134,3 +134,5 @@ function SimLogs({ aid }: { aid: number }) {
       </table>
     </div>
   );
+}
+
