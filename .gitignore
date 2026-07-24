@@ -1,5 +1,5 @@
 # 数据与密钥
-data/
+/data/
 backend/.env
 
 # Python
